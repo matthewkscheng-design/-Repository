@@ -1,0 +1,44 @@
+{
+  "packer": {
+    "required_plugins": {
+      "amazon": {
+        "version": ">= 1.2.8",
+        "source": "github.com/hashicorp/amazon"
+      }
+    }
+  },
+  "variable": {
+    "aws_access_key": {
+      "type": "string",
+      "default": "{{env `AWS_ACCESS_KEY_ID`}}"
+    },
+    "aws_region": {
+      "default": "us-east-2"
+    },
+    "source_ami": {
+      "default": "ami-0ec2b487a01dc5e02"
+    },
+    "instance_type": {
+      "default": "t3.micro"
+    }
+  },
+  "source": {
+    "amazon-ebs": {
+      "windows": {
+        "region": "${var.aws_region}",
+        "instance_type": "${var.instance_type}",
+        "source_ami": "${var.source_ami}",
+        "ami_name": "windows-ami-{{timestamp}}",
+        "associate_public_ip_address": true,
+        "ssh_keypair_name": "Matt-Packer",
+        "ssh_private_key_file": "C:\\Packer\\Matt-Packer.ppk"
+      }
+    }
+  },
+  "build": {
+    "name": "packer-windows",
+    "sources": [
+      "source.amazon-ebs.windows"
+    ]
+  }
+}
